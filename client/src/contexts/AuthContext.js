@@ -41,7 +41,21 @@ export const AuthProvider = ({ children }) => {
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
-      // You can add error handling here, e.g., show a notification
+      throw error;
+    }
+  };
+
+  const register = async (email, password) => {
+    try {
+      const { data } = await api.post('/auth/register', { email, password });
+      localStorage.setItem('token', data.token);
+      setToken(data.token);
+      const decoded = jwtDecode(data.token);
+      setUser({ id: decoded.id, email: decoded.email, role: decoded.role });
+      navigate('/');
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
     }
   };
 
@@ -52,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
-  const value = { user, token, login, logout, initializing };
+  const value = { user, token, login, register, logout, initializing };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

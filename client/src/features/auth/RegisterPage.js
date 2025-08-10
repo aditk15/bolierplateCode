@@ -1,16 +1,47 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
+import { 
+  Container, 
+  TextField, 
+  Button, 
+  Typography, 
+  Box, 
+  Alert,
+  Paper 
+} from '@mui/material';
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    setError('');
+    
+    // Basic validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await register(email, password);
+    } catch (err) {
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -23,11 +54,17 @@ const LoginPage = () => {
       }}>
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h4" align="center" gutterBottom>
-            Sign In
+            Sign Up
           </Typography>
           <Typography variant="body2" align="center" color="textSecondary" sx={{ mb: 3 }}>
-            Welcome back! Please sign in to your account
+            Create your account to get started
           </Typography>
+          
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
           
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
@@ -41,6 +78,7 @@ const LoginPage = () => {
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              type="email"
             />
             <TextField
               margin="normal"
@@ -50,31 +88,45 @@ const LoginPage = () => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              helperText="Password must be at least 6 characters long"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
-              Sign In
+              {loading ? 'Creating Account...' : 'Sign Up'}
             </Button>
             
             <Box textAlign="center" sx={{ mt: 2 }}>
               <Typography variant="body2">
-                Don't have an account?{' '}
+                Already have an account?{' '}
                 <Link 
-                  to="/register" 
+                  to="/login" 
                   style={{ 
                     textDecoration: 'none', 
                     color: '#1976d2',
                     fontWeight: 'bold' 
                   }}
                 >
-                  Sign Up
+                  Sign In
                 </Link>
               </Typography>
             </Box>
@@ -85,4 +137,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
