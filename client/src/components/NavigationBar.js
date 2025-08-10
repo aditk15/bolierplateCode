@@ -22,6 +22,7 @@ const NavigationBar = () => {
     }}>
       <div style={{ flexGrow: 1 }}>
         <Link to="/" style={linkStyle(location.pathname === '/')}>Dashboard</Link>
+        {token && <Link to="/test" style={linkStyle(location.pathname === '/test')}>Test DB</Link>}
         {!token && <Link to="/login" style={linkStyle(location.pathname === '/login')}>Login</Link>}
       </div>
       <div style={{ fontSize: 14, color: '#555' }}>

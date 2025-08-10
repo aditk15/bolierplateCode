@@ -22,6 +22,7 @@ import configurePassport from './config/passport.js';
 // Import routes
 import authRoutes from './features/auth/auth.routes.js';
 import protectedRoutes from './features/protected/protected.routes.js';
+import testRoutes from './features/test/test.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -40,6 +41,7 @@ app.use(passport.initialize());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
+app.use('/api/test', testRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

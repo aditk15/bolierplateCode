@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './features/auth/LoginPage';
 import RegisterPage from './features/auth/RegisterPage';
 import DashboardPage from './features/dashboard/DashBoardPage';
+import TestPage from './features/test/TestPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavigationBar from './components/NavigationBar';
 
@@ -27,6 +28,14 @@ const App = () => {
 					element={
 						<ProtectedRoute>
 							<DashboardPage />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path="/test"
+					element={
+						<ProtectedRoute>
+							<TestPage />
 						</ProtectedRoute>
 					}
 				/>
