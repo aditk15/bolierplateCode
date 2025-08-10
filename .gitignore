@@ -8,5 +8,7 @@ server/node_modules
 client/.env
 server/.env
 
+.DS_Store
+
 # Build folder
 client/build
