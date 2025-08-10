@@ -9,6 +9,8 @@ client/.env
 server/.env
 
 .DS_Store
+client/.DS_Store
+server/.DS_Store
 
 # Build folder
 client/build
